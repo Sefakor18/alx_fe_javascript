@@ -324,3 +324,67 @@ if (last) {
 
 // Kick off background sync every 30s
 startAutoSync(30000);
+
+// Create a notification area in your HTML
+// <div id="notification" class="hidden"></div>
+
+function showNotification(message) {
+  const notification = document.getElementById("notification");
+  notification.textContent = message;
+  notification.classList.remove("hidden");
+
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    notification.classList.add("hidden");
+  }, 5000);
+}
+
+// Simulate fetching quotes from a server
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await response.json();
+
+    // Map server response to quote objects
+    const serverQuotes = data.slice(0, 10).map(post => ({
+      id: post.id,
+      text: post.title,
+      category: "Server"
+    }));
+
+    // Get local quotes
+    const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+
+    // Conflict resolution: server takes precedence
+    let conflicts = 0;
+    const mergedQuotes = [...localQuotes, ...serverQuotes].reduce((acc, quote) => {
+      const existing = acc.find(q => q.id === quote.id);
+      if (!existing) {
+        acc.push(quote);
+      } else if (existing.text !== quote.text) {
+        // Conflict detected → server wins
+        conflicts++;
+        acc = acc.map(q => (q.id === quote.id ? quote : q));
+      }
+      return acc;
+    }, []);
+
+    // Save merged data back to localStorage
+    localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+
+    // Show user notification
+    if (conflicts > 0) {
+      showNotification(`✅ Quotes synced with server. ⚡ ${conflicts} conflicts resolved (server data kept).`);
+    } else {
+      showNotification("✅ Quotes synced with server successfully.");
+    }
+
+    displayQuote(); // refresh UI
+  } catch (error) {
+    console.error("Error fetching quotes from server:", error);
+    showNotification("❌ Failed to sync with server.");
+  }
+}
+
+// Call periodically to sync (every 30s)
+setInterval(fetchQuotesFromServer, 30000);
