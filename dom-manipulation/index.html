@@ -5,37 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dynamic Quote Generator</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f9;
-    }
-    h1 {
-      color: #333;
-    }
-    #quoteDisplay {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fff;
-      min-height: 60px;
-      font-style: italic;
-    }
-    button, input, select {
-      margin: 5px;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #45a049;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f9; }
+    h1 { color: #333; }
+    #quoteDisplay { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background: #fff; min-height: 60px; font-style: italic; }
+    button, input, select { margin: 5px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+    button { background: #4CAF50; color: white; cursor: pointer; }
+    button:hover { background: #45a049; }
   </style>
 </head>
 <body>
@@ -45,8 +20,11 @@
   <div id="quoteDisplay">Click "Show New Quote" to see a quote.</div>
   <button id="newQuote">Show New Quote</button>
 
-  <!-- The category dropdown, add-quote form, and import/export buttons 
-       will be generated dynamically by script.js -->
+  <!-- Export & Import Section -->
+  <div>
+    <button id="exportQuotes">Export Quotes</button>
+    <input type="file" id="importQuotes" accept="application/json">
+  </div>
 
   <script src="script.js"></script>
 </body>
