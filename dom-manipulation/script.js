@@ -388,3 +388,47 @@ async function fetchQuotesFromServer() {
 
 // Call periodically to sync (every 30s)
 setInterval(fetchQuotesFromServer, 30000);
+
+// Send a new quote to the server (simulated POST request)
+async function syncQuoteToServer(quote) {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quote)
+    });
+
+    if (response.ok) {
+      const saved = await response.json();
+      console.log("✅ Quote synced to server:", saved);
+      showNotification("✅ Quote synced to server successfully.");
+    } else {
+      console.error("❌ Failed to sync quote:", response.status);
+      showNotification("❌ Failed to sync quote to server.");
+    }
+  } catch (error) {
+    console.error("Error syncing quote:", error);
+    showNotification("❌ Network error while syncing quote.");
+  }
+}
+
+// Modify addQuote so it also syncs to server
+function addQuote(text, category) {
+  const quotes = JSON.parse(localStorage.getItem("quotes")) || [];
+  const newQuote = { 
+    id: Date.now(), 
+    text, 
+    category 
+  };
+
+  quotes.push(newQuote);
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+
+  // Sync to server
+  syncQuoteToServer(newQuote);
+
+  displayQuote();
+  populateCategories();
+}
