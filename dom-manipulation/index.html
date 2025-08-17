@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
+  <title>Dynamic Quote Generator with Categories</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f9; }
     h1 { color: #333; }
@@ -19,6 +19,12 @@
   <!-- Quote Display Section -->
   <div id="quoteDisplay">Click "Show New Quote" to see a quote.</div>
   <button id="newQuote">Show New Quote</button>
+
+  <!-- Category Filter -->
+  <div>
+    <label for="categoryFilter">Filter by Category:</label>
+    <select id="categoryFilter"></select>
+  </div>
 
   <!-- Export & Import Section -->
   <div>
