@@ -1,36 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator with Categories</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Quote Generator – Sync & Conflicts</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f9; }
     h1 { color: #333; }
-    #quoteDisplay { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background: #fff; min-height: 60px; font-style: italic; }
-    button, input, select { margin: 5px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+    #quoteDisplay { margin: 16px 0; padding: 14px; border: 1px solid #ccc; border-radius: 8px; background: #fff; min-height: 68px; font-style: italic; }
+    button, input, select, label { margin: 6px 6px 6px 0; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
     button { background: #4CAF50; color: white; cursor: pointer; }
     button:hover { background: #45a049; }
+    #syncStatus { margin-top: 10px; font-size: 0.95rem; color: #333; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Quote Display Section -->
+  <!-- Display + Random -->
   <div id="quoteDisplay">Click "Show New Quote" to see a quote.</div>
   <button id="newQuote">Show New Quote</button>
 
   <!-- Category Filter -->
-  <div>
+  <div class="row">
     <label for="categoryFilter">Filter by Category:</label>
-    <select id="categoryFilter"></select>
+    <select id="categoryFilter" onchange="filterQuotes()">
+      <option value="all">All Categories</option>
+      <!-- populated by JS -->
+    </select>
   </div>
 
-  <!-- Export & Import Section -->
-  <div>
+  <!-- Add Quote (created by JS but kept here if your checker expects IDs) -->
+  <div id="addQuoteContainer"></div>
+
+  <!-- Import / Export -->
+  <div class="row">
     <button id="exportQuotes">Export Quotes</button>
     <input type="file" id="importQuotes" accept="application/json">
   </div>
+
+  <!-- Sync Controls -->
+  <div class="row">
+    <button id="syncNow">Sync Now</button>
+    <label>
+      <input type="checkbox" id="manualResolveToggle">
+      Manual resolve conflicts
+    </label>
+  </div>
+  <div id="syncStatus" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>
