@@ -432,3 +432,29 @@ function addQuote(text, category) {
   displayQuote();
   populateCategories();
 }
+// Sync all local quotes with the server
+async function syncQuotes() {
+  const quotes = JSON.parse(localStorage.getItem("quotes")) || [];
+
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quotes) // send all quotes at once
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("✅ Quotes synced:", result);
+      showNotification("✅ All quotes synced with server.");
+    } else {
+      console.error("❌ Failed to sync quotes:", response.status);
+      showNotification("❌ Failed to sync quotes with server.");
+    }
+  } catch (error) {
+    console.error("Error syncing quotes:", error);
+    showNotification("❌ Network error while syncing quotes.");
+  }
+}
